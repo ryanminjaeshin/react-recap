@@ -3,7 +3,7 @@ import BlogList from './BlogList';
 
 const Home = () => {
 
-    const [blogs, setBlogs] = useState([null]);
+    const [blogs, setBlogs] = useState(null);
 
     const [name, setName] = useState('ryan')
 
@@ -14,12 +14,18 @@ const Home = () => {
 
     // runs the function everytime it re-redners
     useEffect(() => {
-        fetch('http://localhost:8000/blogs');
+        fetch('http://localhost:8000/blogs')
+            .then(res => {
+                return res.json();
+            })
+            .then((data) => {
+                setBlogs(data);
+            })
     }, []);
 
     return (  
         <div className="home">
-            <BlogList blogs={blogs} title="All Blogs" handleDelete={handleDelete} />
+            {blogs && <BlogList blogs={blogs} title="All Blogs" handleDelete={handleDelete} />}
         </div>
     );
 }
